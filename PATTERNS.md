@@ -56,3 +56,50 @@ classDiagram
     OyunMotoru ..> NesneFactory : Nesne talep eder
     NesneFactory ..> DusmanBuilder : Karmaşık düşmanları üretir
 ```
+
+---
+
+# Uygulanan Tasarım Örüntüleri (Faz 2)
+
+### 1. Facade (`oyunfacade`)
+* **Nerede:** Oyunun başlatılması, karakter hareketleri, savaş tetiklemeleri ve eşya toplama gibi tüm alt sistem işlemlerinin merkezi olarak yönetildiği arayüzde uygulandı.
+* **Neden:** `OyunMotoru` sınıfındaki karmaşıklığı azaltmak (Adapter yerine Facade seçildi çünkü uyumsuz arayüzleri birleştirmiyoruz, karmaşık bir yapıyı basitleştiriyoruz).
+* **Ne Kazandırdı:** Ana metodun oyun nesnelerinin iç yapısını bilmesine gerek kalmadı. Temiz ve basit bir kullanım sağlandı.
+
+### 2. Decorator (`oyunnesnesidecorator`, `zehirdecorator`, `kalkandecorator`)
+* **Nerede:** Oyun nesnelerinin özelliklerini (zehirli saldırı, kalkan koruması vb.) dinamik olarak değiştirmek için uygulandı.
+* **Neden:** Özellikleri nesnelere alt sınıflar açarak kalıcı olarak eklemek yerine, çalışma zamanında (runtime) esnek bir şekilde giydirip çıkarabilmek için.
+* **Ne Kazandırdı:** Sınıf patlamasını önledi ve Açık/Kapalı Prensibine (Open/Closed Principle) tam uyum sağlandı.
+
+### Faz 2 Mimari Diyagram (UML)
+
+```mermaid
+classDiagram
+    class oyunfacade {
+        +baslat()
+        +oyuncuhareket(dx, dy)
+        +saldir(hedefisim)
+        +dusmanSaldir(saldıranisim)
+        +esyatoplat(esyaisim)
+    }
+    
+    class oyunnesnesidecorator {
+        <<Decorator>>
+        #oyunnesnesi sarilan
+        +saldir(hedef, temelhasar)
+        +hasaral(gelenhasar)
+    }
+    
+    class zehirdecorator {
+        -int zehirhasari
+        +saldir(hedef, temelhasar)
+    }
+    
+    class kalkandecorator {
+        +hasaral(gelenhasar)
+    }
+
+    oyunnesnesidecorator <|-- zehirdecorator
+    oyunnesnesidecorator <|-- kalkandecorator
+    oyunfacade --> oyunnesnesidecorator : Tetikler
+```
