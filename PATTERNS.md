@@ -27,7 +27,7 @@ classDiagram
         +oyuncuYarat()
         +oyunuBaslat()
     }
-    note for OyunMotoru "Tüm durumlar ve nesne\n yaratım if-else blokları\n tek sınıfta (God Class)."
+    note for OyunMotoru "Tüm durumlar ve nesne<br>yaratım if-else blokları<br>tek sınıfta (God Class)."
 ```
 
 **Sonraki Yapı (Tasarım Örüntüleri ile):**
