@@ -1,5 +1,9 @@
 # Mini Oyun Motoru
 
+**Konu Seçimi:** C (Mini Oyun Motoru)
+**Seçim Gerekçesi:** Nesne yönelimli programlamada if-else yapısı başlangıçta bana çok pratik ve anlaşılır geliyor. Ancak proje büyüdükçe bu yapının yönetilemez bir karmaşaya dönüştüğünü bizzat görüp, bu yöntemi profesyonel tasarım örüntüleriyle nasıl daha ileriye taşıyabileceğimi deneyimlemek istedim.
+
+---
 ### 1. Projenin Ne Yaptığı
 Bu proje, Java kullanılarak geliştirilmiş terminal tabanlı bir mini oyun motorudur. Oyuncu, düşman ve eşya gibi nesnelerin yaratılması, hareket ettirilmesi, savaş mekanikleri ve oyun içi olayların yönetilmesi gibi temel oyun döngülerini içerir. Sistem, spagetti kod (if-else yığınları) yerine profesyonel **Yazılım Tasarım Örüntüleri (Design Patterns)** kullanılarak, genişletilebilir (Açık/Kapalı Prensibine - OCP uyumlu) ve modüler bir mimaride tasarlanmıştır.
 
