@@ -103,3 +103,66 @@ classDiagram
     oyunnesnesidecorator <|-- kalkandecorator
     oyunfacade --> oyunnesnesidecorator : Tetikler
 ```
+
+---
+
+# Uygulanan Tasarım Örüntüleri (Faz 3)
+
+### 1. Strategy Pattern (`saldiriStratejisi`)
+* **Nerede:** Oyuncu ve düşman nesnelerinin saldırı mekanizmalarında uygulandı. `yakinSaldiriStratejisi`, `alanSaldiriStratejisi` ve `kritikSaldiriStratejisi` sınıfları türetildi.
+* **Neden:** Yeni bir saldırı veya davranış tipi eklendiğinde mevcut kodları (if-else veya switch-case yapılarını) değiştirmeden, Açık/Kapalı Prensibine (OCP) tam uyumlu şekilde sisteme yeni yetenekler kazandırabilmek için.
+* **Ne Kazandırdı:** Oyun motoru genişletilebilir bir yapıya kavuştu. Sistem mevcut kod tabanını kırmadan yeni stratejilerle büyütülebilir hale geldi.
+
+### 2. Observer Pattern (`oyunolayyayinci`, `oyunolayidinleyici`)
+* **Nerede:** Oyundaki kritik olayların (Ölüm, Bölüm Atlama, Nesne Oluşturulma, Strateji Değişimi) sisteme duyurulmasında ve dinlenmesinde uygulandı. `konsollogdinleyici`, `olumdinleyici` ve `bolumdinleyici` sınıfları bu olayları dinlemektedir.
+* **Neden:** Nesneler arasındaki bağımlılığı gevşetmek (Loose Coupling) ve bir nesnenin durumundaki değişikliği diğer tüm bağımlı nesnelere anında ve otomatik olarak bildirmek için.
+* **Ne Kazandırdı:** Başarı sistemleri, loglama mekanizmaları ve sayaçlar oyun motorunun ana iş mantığına sıkı sıkıya bağlanmadan, tamamen bağımsız modüller olarak sisteme entegre edilebildi.
+
+### Faz 3 Mimari Diyagram (UML)
+
+```mermaid
+classDiagram
+    class saldiriStratejisi {
+        <<Interface>>
+        +saldir(saldiran, hedef)
+    }
+    class yakinSaldiriStratejisi {
+        +saldir(saldiran, hedef)
+    }
+    class alanSaldiriStratejisi {
+        +saldir(saldiran, hedef)
+    }
+    class kritikSaldiriStratejisi {
+        +saldir(saldiran, hedef)
+    }
+    saldiriStratejisi <|.. yakinSaldiriStratejisi
+    saldiriStratejisi <|.. alanSaldiriStratejisi
+    saldiriStratejisi <|.. kritikSaldiriStratejisi
+
+    class oyunolayidinleyici {
+        <<Interface>>
+        +olaygeldi(olaytipi, mesaj)
+    }
+    class konsollogdinleyici {
+        +olaygeldi(olaytipi, mesaj)
+    }
+    class olumdinleyici {
+        +olaygeldi(olaytipi, mesaj)
+    }
+    class bolumdinleyici {
+        +olaygeldi(olaytipi, mesaj)
+    }
+    oyunolayidinleyici <|.. konsollogdinleyici
+    oyunolayidinleyici <|.. olumdinleyici
+    oyunolayidinleyici <|.. bolumdinleyici
+
+    class oyunolayyayinci {
+        <<Singleton>>
+        -static oyunolayyayinci ornek
+        -List~oyunolayidinleyici~ dinleyiciler
+        +getinstance()
+        +dinleyiciekle(d)
+        +yayinla(olaytipi, mesaj)
+    }
+    oyunolayyayinci --> oyunolayidinleyici : Bildirim Yapar
+```
