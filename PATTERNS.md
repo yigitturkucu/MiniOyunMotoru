@@ -14,3 +14,45 @@
 * **Nerede:** 3. Bölümdeki `PATRON` nesnesi ve sonraki bölümlerdeki çok parametreli düşmanların üretiminde uygulandı.
 * **Neden:** Can, saldırı, hız gibi çok sayıda isteğe bağlı parametreye sahip nesneleri esnek üretmek için.
 * **Ne Kazandırdı:** Yapıcı metot (constructor) kirliliğini önledi ve koda akıcı bir okunabilirlik kazandırdı.
+
+### UML Sınıf Diyagramı (Önce / Sonra)
+
+**Önceki Yapı (God Class):**
+```mermaid
+classDiagram
+    class OyunMotoru {
+        -int bolum
+        -int toplamSkor
+        +dusmanYarat()
+        +oyuncuYarat()
+        +oyunuBaslat()
+    }
+    note for OyunMotoru "Tüm durumlar ve nesne\n yaratım if-else blokları\n tek sınıfta (God Class)."
+```
+
+**Sonraki Yapı (Tasarım Örüntüleri ile):**
+```mermaid
+classDiagram
+    class OyunMotoru {
+        +oyunuBaslat()
+    }
+    class OyunDurumu {
+        <<Singleton>>
+        -static ornek
+        +getInstance()
+    }
+    class NesneFactory {
+        <<Factory Method>>
+        +nesneUret(tip)
+    }
+    class DusmanBuilder {
+        <<Builder>>
+        +setCan()
+        +setHasar()
+        +build()
+    }
+    
+    OyunMotoru ..> OyunDurumu : Duruma erişir
+    OyunMotoru ..> NesneFactory : Nesne talep eder
+    NesneFactory ..> DusmanBuilder : Karmaşık düşmanları üretir
+```
