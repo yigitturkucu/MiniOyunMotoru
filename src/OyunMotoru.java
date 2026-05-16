@@ -1,31 +1,57 @@
 import java.util.ArrayList;
 import java.util.List;
 
-class OyunDurumu {
-    private static OyunDurumu ornek;
+class oyundurumu
+{
+    private static oyundurumu ornek;
 
     private int bolum      = 1;
     private int toplamskor = 0;
     private boolean devam  = false;
 
-    private OyunDurumu() {}
+    private oyundurumu()
+    {
+    }
 
-    public static OyunDurumu getInstance() {
-        if (ornek == null) {
-            ornek = new OyunDurumu();
-        }
+    public static oyundurumu getinstance()
+    {
+        if (ornek == null) ornek = new oyundurumu();
         return ornek;
     }
 
-    public int getBolum()           { return bolum; }
-    public void setBolum(int b)     { this.bolum = b; }
-    public int getToplamskor()      { return toplamskor; }
-    public void skorEkle(int puan)  { toplamskor += puan; }
-    public boolean isDevam()        { return devam; }
-    public void setDevam(boolean d) { this.devam = d; }
+    public int getbolum()
+    {
+        return bolum;
+    }
+
+    public void setbolum(int b)
+    {
+        this.bolum = b;
+    }
+
+    public int gettoplamskor()
+    {
+        return toplamskor;
+    }
+
+    public void skobekle(int puan)
+    {
+        toplamskor += puan;
+    }
+
+    public boolean isdevam()
+    {
+        return devam;
+    }
+
+    public void setdevam(boolean d)
+    {
+        this.devam = d;
+    }
 }
 
-class OyunNesnesi {
+class oyunnesnesi
+{
     String tip;
     String isim;
     int x, y;
@@ -33,12 +59,13 @@ class OyunNesnesi {
     int saldiri;
     int hiz;
     boolean hayatta  = true;
-    boolean toplandı = false;
+    boolean toplandi = false;
     int skor;
     String dusmandavranisi;
     String esyatipi;
 
-    OyunNesnesi(String tip, String isim, int x, int y) {
+    oyunnesnesi(String tip, String isim, int x, int y)
+    {
         this.tip  = tip;
         this.isim = isim;
         this.x    = x;
@@ -46,62 +73,72 @@ class OyunNesnesi {
     }
 }
 
-abstract class NesneFactory {
-    public abstract OyunNesnesi olustur(String isim, int x, int y);
+abstract class nesnefactory
+{
+    public abstract oyunnesnesi olustur(String isim, int x, int y);
 }
 
-class OyuncuFactory extends NesneFactory {
+class oyuncufactory extends nesnefactory
+{
     @Override
-    public OyunNesnesi olustur(String isim, int x, int y) {
-        OyunNesnesi o = new OyunNesnesi("oyuncu", isim, x, y);
+    public oyunnesnesi olustur(String isim, int x, int y)
+    {
+        oyunnesnesi o = new oyunnesnesi("oyuncu", isim, x, y);
         o.can     = 100;
         o.saldiri = 10;
         o.hiz     = 5;
         o.skor    = 0;
-        System.out.println("[OyuncuFactory] " + isim + " olusturuldu.");
+        System.out.println("[oyuncufactory] " + isim + " olusturuldu.");
         return o;
     }
 }
 
-class DusmanFactory extends NesneFactory {
+class dusmanfactory extends nesnefactory
+{
     private final String davranis;
 
-    DusmanFactory(String davranis) {
+    dusmanfactory(String davranis)
+    {
         this.davranis = davranis;
     }
 
     @Override
-    public OyunNesnesi olustur(String isim, int x, int y) {
-        OyunNesnesi d = new OyunNesnesi("dusman", isim, x, y);
+    public oyunnesnesi olustur(String isim, int x, int y)
+    {
+        oyunnesnesi d = new oyunnesnesi("dusman", isim, x, y);
         d.can             = 50;
         d.saldiri         = 8;
         d.hiz             = 3;
         d.dusmandavranisi = davranis;
-        System.out.println("[DusmanFactory] " + isim + " (" + davranis + ") olusturuldu.");
+        System.out.println("[dusmanfactory] " + isim + " (" + davranis + ") olusturuldu.");
         return d;
     }
 }
 
-class EsyaFactory extends NesneFactory {
+class esyafactory extends nesnefactory
+{
     private final String esyatip;
 
-    EsyaFactory(String esyatip) {
+    esyafactory(String esyatip)
+    {
         this.esyatip = esyatip;
     }
 
     @Override
-    public OyunNesnesi olustur(String isim, int x, int y) {
-        OyunNesnesi e = new OyunNesnesi("esya", isim, x, y);
+    public oyunnesnesi olustur(String isim, int x, int y)
+    {
+        oyunnesnesi e = new oyunnesnesi("esya", isim, x, y);
         e.can      = 0;
         e.saldiri  = 0;
         e.hiz      = 0;
         e.esyatipi = esyatip;
-        System.out.println("[EsyaFactory] " + isim + " (" + esyatip + ") olusturuldu.");
+        System.out.println("[esyafactory] " + isim + " (" + esyatip + ") olusturuldu.");
         return e;
     }
 }
 
-class DusmanBuilder {
+class dusmanbuilder
+{
     private String isim;
     private int x, y;
     private int can      = 50;
@@ -109,223 +146,352 @@ class DusmanBuilder {
     private int hiz      = 3;
     private String davranis = "saldirgan";
 
-    public DusmanBuilder(String isim, int x, int y) {
+    public dusmanbuilder(String isim, int x, int y)
+    {
         this.isim = isim;
         this.x    = x;
         this.y    = y;
     }
 
-    public DusmanBuilder can(int can)         { this.can      = can;     return this; }
-    public DusmanBuilder saldiri(int saldiri) { this.saldiri  = saldiri; return this; }
-    public DusmanBuilder hiz(int hiz)         { this.hiz      = hiz;     return this; }
-    public DusmanBuilder davranis(String d)   { this.davranis = d;       return this; }
+    public dusmanbuilder can(int can)
+    {
+        this.can = can;
+        return this;
+    }
 
-    public OyunNesnesi build() {
-        OyunNesnesi d = new OyunNesnesi("dusman", isim, x, y);
+    public dusmanbuilder saldiri(int saldiri)
+    {
+        this.saldiri = saldiri;
+        return this;
+    }
+
+    public dusmanbuilder hiz(int hiz)
+    {
+        this.hiz = hiz;
+        return this;
+    }
+
+    public dusmanbuilder davranis(String d)
+    {
+        this.davranis = d;
+        return this;
+    }
+
+    public oyunnesnesi build()
+    {
+        oyunnesnesi d = new oyunnesnesi("dusman", isim, x, y);
         d.can             = can;
         d.saldiri         = saldiri;
         d.hiz             = hiz;
         d.dusmandavranisi = davranis;
-        System.out.println("[DusmanBuilder] " + isim
+        System.out.println("[dusmanbuilder] " + isim
                 + " (can=" + can + ", saldiri=" + saldiri
                 + ", davranis=" + davranis + ") insa edildi.");
         return d;
     }
 }
 
-public class OyunMotoru {
+abstract class oyunnesnesidecorator
+{
+    protected final oyunnesnesi sarilan;
 
-    static List<OyunNesnesi> tumnesneler = new ArrayList<>();
-    static OyunNesnesi oyuncu;
+    oyunnesnesidecorator(oyunnesnesi sarilan)
+    {
+        this.sarilan = sarilan;
+    }
 
-    static OyunNesnesi ekle(OyunNesnesi n) {
+    public void saldir(oyunnesnesi hedef, int temelhasar)
+    {
+        temelhasaruygula(hedef, temelhasar);
+    }
+
+    public int hasaral(int gelenhasar)
+    {
+        return gelenhasar;
+    }
+
+    protected void temelhasaruygula(oyunnesnesi hedef, int hasar)
+    {
+        hedef.can -= hasar;
+        System.out.println("[decorator] " + sarilan.isim + " -> " + hedef.isim
+                + " temel hasar: " + hasar + "  (kalan can: " + hedef.can + ")");
+        if (hedef.can <= 0)
+        {
+            hedef.hayatta = false;
+            System.out.println("[decorator] " + hedef.isim + " olduruldu!");
+            oyundurumu.getinstance().skobekle(10);
+        }
+    }
+
+    public oyunnesnesi getnesne()
+    {
+        return sarilan;
+    }
+}
+
+class zehirdecorator extends oyunnesnesidecorator
+{
+    private final int zehirhasari;
+
+    zehirdecorator(oyunnesnesi sarilan, int zehirhasari)
+    {
+        super(sarilan);
+        this.zehirhasari = zehirhasari;
+        System.out.println("[zehirdecorator] " + sarilan.isim
+                + " zehirle kaplaniyor (+" + zehirhasari + " zehir hasari).");
+    }
+
+    @Override
+    public void saldir(oyunnesnesi hedef, int temelhasar)
+    {
+        temelhasaruygula(hedef, temelhasar);
+        if (hedef.hayatta)
+        {
+            hedef.can -= zehirhasari;
+            System.out.println("[zehirdecorator] " + hedef.isim
+                    + " zehirlendi! +" + zehirhasari + " zehir hasari"
+                    + "  (kalan can: " + hedef.can + ")");
+            if (hedef.can <= 0)
+            {
+                hedef.hayatta = false;
+                System.out.println("[zehirdecorator] " + hedef.isim + " zehirden oldu!");
+                oyundurumu.getinstance().skobekle(10);
+            }
+        }
+    }
+}
+
+class kalkandecorator extends oyunnesnesidecorator
+{
+    kalkandecorator(oyunnesnesi sarilan)
+    {
+        super(sarilan);
+        System.out.println("[kalkandecorator] " + sarilan.isim
+                + " kalkanla donatiliyor (hasar %50 azalir).");
+    }
+
+    @Override
+    public int hasaral(int gelenhasar)
+    {
+        int azaltilmis = gelenhasar / 2;
+        System.out.println("[kalkandecorator] " + sarilan.isim
+                + " kalkani " + gelenhasar + " hasari " + azaltilmis + "'e indirdi.");
+        return azaltilmis;
+    }
+}
+
+class oyunfacade
+{
+    private final List<oyunnesnesi> tumnesneler = new ArrayList<>();
+    private oyunnesnesi oyuncu;
+
+    private final java.util.Map<String, oyunnesnesidecorator> decoratorlar
+            = new java.util.HashMap<>();
+
+    public void baslat()
+    {
+        System.out.println("\n[facade] Oyun basliyor...");
+        oyundurumu.getinstance().setdevam(true);
+
+        oyuncu = ekle(new oyuncufactory().olustur("Kahraman", 0, 0));
+
+        ekle(new dusmanfactory("saldirgan").olustur("Goblin", 10, 10));
+        ekle(new dusmanfactory("pasif").olustur("Slime", 15, 5));
+
+        ekle(new esyafactory("can_iksiri").olustur("Can_Iksiri", 5, 5));
+        ekle(new esyafactory("altin").olustur("Altin", 8, 8));
+    }
+
+    public void oyuncuhareket(int dx, int dy)
+    {
+        if (oyuncu == null || !oyuncu.hayatta)
+        {
+            System.out.println("[facade] Oyuncu hareket edemez.");
+            return;
+        }
+        oyuncu.x += dx * oyuncu.hiz;
+        oyuncu.y += dy * oyuncu.hiz;
+        System.out.println("[facade] " + oyuncu.isim
+                + " konuma gitti: (" + oyuncu.x + ", " + oyuncu.y + ")");
+    }
+
+    public void saldir(String hedefisim)
+    {
+        oyunnesnesi hedef = nesneara(hedefisim);
+        if (hedef == null || !hedef.hayatta)
+        {
+            System.out.println("[facade] Hedef bulunamadi veya hayatta degil: " + hedefisim);
+            return;
+        }
+        if (!oyuncu.hayatta)
+        {
+            System.out.println("[facade] Oyuncu olu, saldiramaz.");
+            return;
+        }
+
+        oyunnesnesidecorator dec = decoratorlar.get(hedefisim);
+        if (dec != null)
+        {
+            dec.saldir(hedef, oyuncu.saldiri);
+        }
+        else
+        {
+            hedef.can -= oyuncu.saldiri;
+            System.out.println("[facade] Oyuncu " + hedef.isim
+                    + "'a " + oyuncu.saldiri + " hasar verdi."
+                    + " (kalan can: " + hedef.can + ")");
+            if (hedef.can <= 0)
+            {
+                hedef.hayatta = false;
+                oyundurumu.getinstance().skobekle(10);
+                System.out.println("[facade] " + hedef.isim + " olduruldu! Skor: "
+                        + oyundurumu.getinstance().gettoplamskor());
+            }
+        }
+    }
+
+    public void dusmanSaldir(String saldıranisim)
+    {
+        oyunnesnesi saldiran = nesneara(saldıranisim);
+        if (saldiran == null || !saldiran.hayatta || !"dusman".equals(saldiran.tip)) return;
+        if (!oyuncu.hayatta) return;
+
+        int hasar = "uzaktan".equals(saldiran.dusmandavranisi)
+                ? saldiran.saldiri / 2
+                : ("saldirgan".equals(saldiran.dusmandavranisi) ? saldiran.saldiri : 0);
+
+        oyunnesnesidecorator oyuncudec = decoratorlar.get(oyuncu.isim);
+        if (oyuncudec != null)
+        {
+            hasar = oyuncudec.hasaral(hasar);
+        }
+
+        oyuncu.can -= hasar;
+        System.out.println("[facade] " + saldiran.isim + " oyuncuya " + hasar + " hasar verdi."
+                + " (oyuncu can: " + oyuncu.can + ")");
+        if (oyuncu.can <= 0)
+        {
+            oyuncu.hayatta = false;
+            System.out.println("[facade] Oyuncu oldu! Oyun bitti.");
+            oyundurumu.getinstance().setdevam(false);
+        }
+    }
+
+    public void esyatoplat(String esyaisim)
+    {
+        oyunnesnesi esya = nesneara(esyaisim);
+        if (esya == null || !"esya".equals(esya.tip) || esya.toplandi)
+        {
+            System.out.println("[facade] Esya alinamaz: " + esyaisim);
+            return;
+        }
+        esya.toplandi = true;
+        esya.hayatta  = false;
+        switch (esya.esyatipi)
+        {
+            case "can_iksiri":
+                oyuncu.can = Math.min(oyuncu.can + 30, 100);
+                System.out.println("[facade] Can iksiri kullanildi! Can: " + oyuncu.can);
+                break;
+            case "kilic":
+                oyuncu.saldiri += 5;
+                System.out.println("[facade] Kilic toplandi! Saldiri: " + oyuncu.saldiri);
+                break;
+            case "altin":
+                oyundurumu.getinstance().skobekle(5);
+                System.out.println("[facade] Altin toplandi! Skor: "
+                        + oyundurumu.getinstance().gettoplamskor());
+                break;
+        }
+    }
+
+    public void decoratorekle(String nesneisim, oyunnesnesidecorator decorator)
+    {
+        decoratorlar.put(nesneisim, decorator);
+    }
+
+    public void durumyazdir()
+    {
+        oyundurumu durum = oyundurumu.getinstance();
+        System.out.println("\n--- OYUN DURUMU ---");
+        System.out.println("Bolum: " + durum.getbolum() + " | Skor: " + durum.gettoplamskor());
+        for (oyunnesnesi n : tumnesneler)
+        {
+            if (!n.hayatta) continue;
+            String decbilgi = decoratorlar.containsKey(n.isim)
+                    ? " [" + decoratorlar.get(n.isim).getClass().getSimpleName() + "]" : "";
+            switch (n.tip)
+            {
+                case "oyuncu" -> System.out.println("  [OYUNCU] " + n.isim
+                        + " - Can: " + n.can + " | Saldiri: " + n.saldiri
+                        + " | Konum: (" + n.x + "," + n.y + ")" + decbilgi);
+                case "dusman" -> System.out.println("  [DUSMAN] " + n.isim
+                        + " - Can: " + n.can + " | Davranis: " + n.dusmandavranisi
+                        + " | Konum: (" + n.x + "," + n.y + ")" + decbilgi);
+                case "esya"   -> System.out.println("  [ESYA]   " + n.isim
+                        + " - Tip: " + n.esyatipi
+                        + " | Konum: (" + n.x + "," + n.y + ")");
+            }
+        }
+        System.out.println("-------------------\n");
+    }
+
+    private oyunnesnesi ekle(oyunnesnesi n)
+    {
         tumnesneler.add(n);
-        if ("oyuncu".equals(n.tip)) oyuncu = n;
         return n;
     }
 
-    public static void hareket(OyunNesnesi nesne, int dx, int dy) {
-        if ("oyuncu".equals(nesne.tip)) {
-            if (!nesne.hayatta) { System.out.println("Oyuncu oldu, hareket edemez."); return; }
-            nesne.x += dx * nesne.hiz;
-            nesne.y += dy * nesne.hiz;
-            System.out.println(nesne.isim + " konuma gitti: (" + nesne.x + ", " + nesne.y + ")");
-
-        } else if ("dusman".equals(nesne.tip)) {
-            if (!nesne.hayatta) return;
-            if ("saldirgan".equals(nesne.dusmandavranisi) && oyuncu != null) {
-                int yonx = oyuncu.x > nesne.x ? 1 : -1;
-                int yony = oyuncu.y > nesne.y ? 1 : -1;
-                nesne.x += yonx * nesne.hiz;
-                nesne.y += yony * nesne.hiz;
-            } else if ("uzaktan".equals(nesne.dusmandavranisi) && oyuncu != null) {
-                int mesafe = Math.abs(oyuncu.x - nesne.x) + Math.abs(oyuncu.y - nesne.y);
-                if (mesafe < 10) {
-                    int yonx = oyuncu.x > nesne.x ? -1 : 1;
-                    nesne.x += yonx * nesne.hiz;
-                }
-            }
-        }
+    private oyunnesnesi nesneara(String isim)
+    {
+        return tumnesneler.stream()
+                .filter(n -> n.isim.equals(isim))
+                .findFirst()
+                .orElse(null);
     }
+}
 
-    public static void saldir(OyunNesnesi saldiran, OyunNesnesi hedef) {
-        OyunDurumu durum = OyunDurumu.getInstance();
+public class OyunMotoru
+{
+    public static void main(String[] args)
+    {
+        oyunfacade facade = new oyunfacade();
+        facade.baslat();
+        facade.durumyazdir();
 
-        if ("oyuncu".equals(saldiran.tip)) {
-            if (!saldiran.hayatta || !hedef.hayatta) return;
-            if ("dusman".equals(hedef.tip)) {
-                hedef.can -= saldiran.saldiri;
-                System.out.println("Oyuncu " + hedef.isim + "'a " + saldiran.saldiri + " hasar verdi.");
-                if (hedef.can <= 0) {
-                    hedef.hayatta = false;
-                    durum.skorEkle(10);
-                    System.out.println(hedef.isim + " olduruldu! Skor: " + durum.getToplamskor());
-                }
-            } else if ("oyuncu".equals(hedef.tip)) {
-                System.out.println("Oyuncu kendine saldiramaz.");
-            } else {
-                System.out.println("Esyaya saldirilmaz.");
-            }
+        oyunnesnesi goblinnesnesi = new dusmanfactory("saldirgan")
+                .olustur("GoblinSavas", 12, 12);
 
-        } else if ("dusman".equals(saldiran.tip)) {
-            if (!saldiran.hayatta || !hedef.hayatta) return;
-            if ("oyuncu".equals(hedef.tip)) {
-                int hasar = "uzaktan".equals(saldiran.dusmandavranisi)
-                        ? saldiran.saldiri / 2
-                        : ("saldirgan".equals(saldiran.dusmandavranisi) ? saldiran.saldiri : 0);
-                hedef.can -= hasar;
-                System.out.println(saldiran.isim + " oyuncuya " + hasar + " hasar verdi.");
-                if (hedef.can <= 0) {
-                    hedef.hayatta = false;
-                    System.out.println("Oyuncu oldu! Oyun bitti.");
-                    durum.setDevam(false);
-                }
-            }
-        } else {
-            System.out.println("Esya saldiramaz.");
-        }
-    }
+        zehirdecorator zehirligoblin = new zehirdecorator(goblinnesnesi, 5);
+        facade.decoratorekle("GoblinSavas", zehirligoblin);
 
-    public static void esyatopla(OyunNesnesi oyuncunesne, OyunNesnesi esya) {
-        OyunDurumu durum = OyunDurumu.getInstance();
-        if (!"oyuncu".equals(oyuncunesne.tip)) { System.out.println("Sadece oyuncu esya toplayabilir."); return; }
-        if (!"esya".equals(esya.tip))           { System.out.println("Bu bir esya degil.");               return; }
-        if (esya.toplandı)                       { System.out.println("Bu esya zaten toplandi.");          return; }
+        oyunnesnesi oyuncuref = new oyunnesnesi("oyuncu", "Kahraman", 0, 0);
+        kalkandecorator kalkanlioyuncu = new kalkandecorator(oyuncuref);
+        facade.decoratorekle("Kahraman", kalkanlioyuncu);
 
-        esya.toplandı = true;
-        esya.hayatta  = false;
+        System.out.println("\n=== SALDIRI TESTLERI ===");
 
-        switch (esya.esyatipi) {
-            case "can_iksiri":
-                oyuncunesne.can = Math.min(oyuncunesne.can + 30, 100);
-                System.out.println("Can iksiri kullanildi! Can: " + oyuncunesne.can);
-                break;
-            case "kilic":
-                oyuncunesne.saldiri += 5;
-                System.out.println("Kilic toplandi! Saldiri gucu: " + oyuncunesne.saldiri);
-                break;
-            case "altin":
-                durum.skorEkle(5);
-                System.out.println("Altin toplandi! Skor: " + durum.getToplamskor());
-                break;
-        }
-    }
+        facade.saldir("Goblin");
+        facade.saldir("Goblin");
+        facade.saldir("Goblin");
+        facade.saldir("Goblin");
+        facade.saldir("Goblin");
 
-    public static void oyunuguncelle() {
-        OyunDurumu durum = OyunDurumu.getInstance();
-        if (!durum.isDevam()) return;
+        facade.esyatoplat("Can_Iksiri");
 
-        for (OyunNesnesi nesne : tumnesneler) {
-            if (!nesne.hayatta) continue;
-            if ("dusman".equals(nesne.tip)) {
-                hareket(nesne, 0, 0);
-                if (oyuncu != null && oyuncu.hayatta) {
-                    int mesafe = Math.abs(oyuncu.x - nesne.x) + Math.abs(oyuncu.y - nesne.y);
-                    if (mesafe <= 2) saldir(nesne, oyuncu);
-                }
-            }
-        }
+        System.out.println("\n=== KALKAN TESTI: Slime saldirisi ===");
+        facade.dusmanSaldir("Slime");
 
-        boolean tumdusmanlaroldu = tumnesneler.stream()
-                .noneMatch(n -> "dusman".equals(n.tip) && n.hayatta);
-        if (tumdusmanlaroldu) {
-            durum.setBolum(durum.getBolum() + 1);
-            System.out.println("=== BOLUM " + durum.getBolum() + " ===");
-            bolumdusmanlariniolustur(durum.getBolum());
-        }
-    }
+        facade.oyuncuhareket(1, 1);
 
-    public static void bolumdusmanlariniolustur(int bolum) {
-        if (bolum == 2) {
-            ekle(new DusmanFactory("saldirgan").olustur("Goblin_Lider", 20, 20)).can = 80;
-            ekle(new DusmanFactory("uzaktan").olustur("Ok_Atan", 30, 10));
+        facade.durumyazdir();
 
-        } else if (bolum == 3) {
-            ekle(new DusmanBuilder("PATRON", 50, 50)
-                    .can(200)
-                    .saldiri(25)
-                    .hiz(2)
-                    .davranis("saldirgan")
-                    .build());
-
-        } else if (bolum >= 4) {
-            for (int i = 0; i < bolum; i++) {
-                ekle(new DusmanBuilder("Dusman_" + i, i * 5, i * 5)
-                        .can(50 + bolum * 10)
-                        .build());
-            }
-        }
-    }
-
-    public static void oyunubaslat() {
-        System.out.println("Oyun basliyor!");
-        OyunDurumu.getInstance().setDevam(true);
-
-        ekle(new OyuncuFactory().olustur("Kahraman", 0, 0));
-
-        ekle(new DusmanFactory("saldirgan").olustur("Goblin", 10, 10));
-        ekle(new DusmanFactory("pasif").olustur("Slime", 15, 5));
-
-        ekle(new EsyaFactory("can_iksiri").olustur("Can_Iksiri", 5, 5));
-        ekle(new EsyaFactory("altin").olustur("Altin", 8, 8));
-    }
-
-    public static void durumyazdir() {
-        OyunDurumu durum = OyunDurumu.getInstance();
-        System.out.println("--- OYUN DURUMU ---");
-        System.out.println("Bolum: " + durum.getBolum() + " | Toplam Skor: " + durum.getToplamskor());
-        for (OyunNesnesi nesne : tumnesneler) {
-            if (!nesne.hayatta) continue;
-            switch (nesne.tip) {
-                case "oyuncu" -> System.out.println("[OYUNCU] " + nesne.isim
-                        + " - Can: " + nesne.can + " | Saldiri: " + nesne.saldiri
-                        + " | Konum: (" + nesne.x + "," + nesne.y + ")");
-                case "dusman" -> System.out.println("[DUSMAN] " + nesne.isim
-                        + " - Can: " + nesne.can + " | Davranis: " + nesne.dusmandavranisi
-                        + " | Konum: (" + nesne.x + "," + nesne.y + ")");
-                case "esya"   -> System.out.println("[ESYA]   " + nesne.isim
-                        + " - Tip: " + nesne.esyatipi
-                        + " | Konum: (" + nesne.x + "," + nesne.y + ")");
-            }
-        }
-        System.out.println("-------------------");
-    }
-
-    public static void main(String[] args) {
-        oyunubaslat();
-        durumyazdir();
-
-        oyunuguncelle();
-
-        hareket(oyuncu, 1, 1);
-
-        OyunNesnesi goblin = tumnesneler.get(1);
-        for (int i = 0; i < 5; i++) saldir(oyuncu, goblin);
-
-        OyunNesnesi iksir = tumnesneler.get(3);
-        esyatopla(oyuncu, iksir);
-
-        oyunuguncelle();
-        durumyazdir();
+        System.out.println("=== ZEHIR DECORATOR DOGRUDAN TESTI ===");
+        oyunnesnesi mantar = new dusmanfactory("pasif").olustur("ManturDusman", 3, 3);
+        zehirdecorator zehirlimantar = new zehirdecorator(mantar, 8);
+        oyunnesnesi fakeoyuncu = new oyunnesnesi("oyuncu", "FakeKahraman", 0, 0);
+        fakeoyuncu.saldiri = 12;
+        fakeoyuncu.can     = 100;
+        zehirlimantar.saldir(mantar, fakeoyuncu.saldiri);
     }
 }
