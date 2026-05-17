@@ -1,4 +1,4 @@
-# Faz 3: AI Pair Programming ve Behavioral Analiz Logu
+# Faz 3 AI Pair Programming ve Behavioral Analiz Logu
 
 ### 1. Oturum Özeti: Ne Tartıştık, Nasıl İlerledik?
 Bu fazda AI ile yaklaşık 40 dakikalık bir "Pair Programming" oturumu gerçekleştirdik. Ana tartışma konumuz, projeye eklenecek yeni davranışların **Açık/Kapalı Prensibini (OCP)** nasıl ihlal etmeden entegre edileceğiydi. 
